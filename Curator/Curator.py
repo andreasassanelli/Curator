@@ -1,5 +1,11 @@
 import os, sys
+import logging
+import threading
 from stat import *
+
+#import modules
+import ingestDATs
+import FileScanner
 
 def walktree(top, callback):
     '''recursively descend the directory tree rooted at top,
@@ -21,5 +27,23 @@ def walktree(top, callback):
 def visitfile(file):
     print('visiting', file)
 
+def main(args):
+    # Set-up logging facility
+    logging.basicConfig(filename='C:\\curator\\curator.log', level=logging.DEBUG)
+    logging.info('Session Started - ')
+    logging.debug("Launch Arguments: ")
+
+    # Start the program (artificial)
+    xml_filepath = "C:\\curator\\dats\\dat.xml"
+    xml_dat_file = ingestDATs.XmlDATFile(xml_filepath)
+
+    scanThread = FileScanner.FileScanner('C:\\curator\\in\\')
+    scanThread.start()
+    scanThread.join()
+
+    logging.info('Session Finished - ')
+
 if __name__ == '__main__':
-    walktree(sys.argv[1], visitfile)
+    #walktree(sys.argv[1], visitfile)
+    #walktree(input(), visitfile)
+    main(sys.argv[1:])
